@@ -25,5 +25,14 @@ public class InputManager : MonoBehaviour
                 if(debug) Debug.Log("There is no gun to fire!");
             }
         }
+
+        var keyboard = Keyboard.current;
+        if(keyboard == null) return;
+
+        if(keyboard.rKey.wasPressedThisFrame) {
+            if(gun != null) {
+                gun.Reload();
+            }
+        }
     }
 }

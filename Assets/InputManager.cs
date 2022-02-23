@@ -16,6 +16,7 @@ public class InputManager : MonoBehaviour
         var mouse = Mouse.current;
         if(mouse == null) return;
 
+        // isPressed
         if(mouse.leftButton.wasPressedThisFrame) {
             if(debug) Debug.Log("Left Mouse Button was pressed this frame.");
             

@@ -10,6 +10,10 @@ public class InputManager : MonoBehaviour
 
     public bool debug = false;
 
+    void Start() {
+        if(debug) Debug.Log("Input Manager is starting up.");
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -17,7 +21,7 @@ public class InputManager : MonoBehaviour
         if(mouse == null) return;
 
         // isPressed
-        if(mouse.leftButton.wasPressedThisFrame) {
+        if(mouse.leftButton.isPressed) {
             if(debug) Debug.Log("Left Mouse Button was pressed this frame.");
             
             if(gun != null) {

@@ -1344,10 +1344,11 @@ MonoBehaviour:
   bulletPrefab: {fileID: 6676460115987078595, guid: 403c1cbe4987b804a8e56e103ba6f8f0, type: 3}
   bulletSpawn: {fileID: 645387531}
   bulletSpeed: 10
-  debug: 1
-  totalAmmo: 30
-  clipSize: 10
-  clip: 0
+  fireRate: 0.1
+  debug: 0
+  totalAmmo: 300
+  clipSize: 20
+  clip: 20
 --- !u!4 &2146732029
 Transform:
   m_ObjectHideFlags: 0

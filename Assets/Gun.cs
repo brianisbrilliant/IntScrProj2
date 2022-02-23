@@ -11,6 +11,7 @@ public class Gun : MonoBehaviour
     // attributes are awesome, really
     [Range(10,100)]
     public float bulletSpeed = 50;
+    public float fireRate = 0.1f;
 
     public bool debug = false;
 
@@ -19,8 +20,7 @@ public class Gun : MonoBehaviour
     public int clipSize = 10;
     public int clip = 0;
 
-    // 1. we're allowed to burn our ammo by pressing R repeatedly.
-    // 2. we lose the whole clip if we reload a partial clip.
+    bool canShoot = true;
 
     public void Reload() {
         if(clip == clipSize) {
@@ -41,19 +41,29 @@ public class Gun : MonoBehaviour
     }
 
     public void Fire() {
-        
-        if(clip > 0) {
-            if(debug) Debug.Log("Pow!");
-            clip -= 1;
-            // create a copy of the bullet prefab
-            Rigidbody bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-            // move the bullet in front of the gun
-            bullet.transform.Translate(0,0,1);
-            // add forward force to the bullet
-            bullet.AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
-        } else {
-            if(debug) Debug.Log("Out of Ammo!");
+        if(canShoot) {
+            if(clip > 0) {
+                if(debug) Debug.Log("Pow!");
+                clip -= 1;
+                // create a copy of the bullet prefab
+                Rigidbody bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+                // move the bullet in front of the gun
+                bullet.transform.Translate(0,0,1);
+                // add forward force to the bullet
+                bullet.AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
+
+                StartCoroutine(Cooldown());
+            } else {
+                if(debug) Debug.Log("Out of Ammo!");
+            }
         }
+        
+    }
+
+    IEnumerator Cooldown() {
+        canShoot = false;
+        yield return new WaitForSeconds(fireRate);
+        canShoot = true;
     }
     
 }

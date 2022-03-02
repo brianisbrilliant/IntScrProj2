@@ -16,9 +16,13 @@ public class FallingPlatform : MonoBehaviour
 
     public bool randomize = true;
 
+    public Color startColor, waitColor, fallColor;
+
     Rigidbody rb;
     Vector3 startPosition;
     Quaternion startRotation;
+    
+    Renderer rend;
     bool platformIsActive = false;
 
     // Start is called before the first frame update
@@ -32,6 +36,8 @@ public class FallingPlatform : MonoBehaviour
         rb = this.GetComponent<Rigidbody>();
         startPosition = this.transform.position;
         startRotation = this.transform.rotation;
+        rend = GetComponent<Renderer>();
+        startColor = rend.material.color;
 
         Randomize();
     }
@@ -62,8 +68,10 @@ public class FallingPlatform : MonoBehaviour
     IEnumerator WaitToFall() {
         if(!platformIsActive) {
             platformIsActive = true;
+            rend.material.color = waitColor;
             yield return new WaitForSeconds(hangTime);
             rb.isKinematic = false;
+            rend.material.color = fallColor;
             // call another coroutine that waits 8 seconds, then resets the platform.
             StartCoroutine(ResetPlatform());
         }
@@ -72,6 +80,7 @@ public class FallingPlatform : MonoBehaviour
     IEnumerator ResetPlatform() {
         yield return new WaitForSeconds(resetTimer);
         rb.isKinematic = true;      // stop falling
+        rend.material.color = waitColor;
 
         Vector3 pointB = startPosition;
         Vector3 pointA = this.transform.position;
@@ -84,6 +93,7 @@ public class FallingPlatform : MonoBehaviour
         while(timer < 1) {
             this.transform.position = Vector3.Lerp(pointA, pointB, curve.Evaluate(timer));      // position
             this.transform.rotation = Quaternion.Lerp(rotA, rotB, curve.Evaluate(timer));       // rotation
+            rend.material.color = Color.Lerp(fallColor, startColor, curve.Evaluate(timer));
             timer += Time.deltaTime / resetInterval;        // defaults to 3 seconds.
             yield return null;
         }
@@ -94,6 +104,7 @@ public class FallingPlatform : MonoBehaviour
 
         Randomize();
 
+        rend.material.color = startColor;
         platformIsActive = false;
     }
 }

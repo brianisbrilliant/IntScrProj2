@@ -6,19 +6,20 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
-    public static TextMeshProUGUI playerHealthText;
+    public static TextMeshProUGUI playerHealthText, enemiesKilledText, ammoInClipText, ammoInReserveText;
 
-    public static int totalEnemiesKilled = 0;
+    static int totalEnemiesKilled = 0;
 
-    void Start() {
+    void Awake() {
         playerHealthText = GameObject.Find("PlayerHealthText").GetComponent<TextMeshProUGUI>();
-
-        // UIManager.playerHealthText.text = "";
-    }
-
-    void Update() {
-        // display totalEnemiesKilled
+        enemiesKilledText = GameObject.Find("EnemiesKilledText").GetComponent<TextMeshProUGUI>();
+        ammoInClipText = GameObject.Find("AmmoInClipText").GetComponent<TextMeshProUGUI>();
+        ammoInReserveText = GameObject.Find("AmmoInReserveText").GetComponent<TextMeshProUGUI>();
     }
 
     // building a static function to keep track of enemies killed.
+    public static void KilledEnemy() {
+        totalEnemiesKilled += 1;
+        enemiesKilledText.text = "Kill Count: " + totalEnemiesKilled.ToString();
+    }
 }

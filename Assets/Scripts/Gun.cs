@@ -32,6 +32,8 @@ public class Gun : MonoBehaviour
 
     void Start() {
         aud = this.gameObject.GetComponent<AudioSource>();
+        UIManager.ammoInClipText.text = "Clip: " + clip.ToString();
+        UIManager.ammoInReserveText.text = "Ammo: " + totalAmmo.ToString();
     }
 
     public void Reload() {
@@ -49,7 +51,8 @@ public class Gun : MonoBehaviour
             totalAmmo = 0;
         }
 
-        
+        UIManager.ammoInClipText.text = "Clip: " + clip.ToString();
+        UIManager.ammoInReserveText.text = "Ammo: " + totalAmmo.ToString();
     }
 
     public void Fire() {
@@ -66,6 +69,8 @@ public class Gun : MonoBehaviour
                 // add forward force to the bullet
                 bullet.AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
 
+                UIManager.ammoInClipText.text = "Clip: " + clip.ToString();
+
                 StartCoroutine(Cooldown());
             } else {
                 if(debug) Debug.Log("Out of Ammo!");
@@ -76,6 +81,7 @@ public class Gun : MonoBehaviour
 
     public void GetAmmo() {
         totalAmmo += 90;
+        UIManager.ammoInReserveText.text = "Ammo: " + totalAmmo.ToString();
         aud.PlayOneShot(getAmmo);
     }
 

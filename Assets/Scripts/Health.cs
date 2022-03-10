@@ -30,8 +30,6 @@ public class Health : MonoBehaviour
     // todo - randomize starting health
     // regenerate health for enemies and player?
     // for objects, break objects into smaller pieces upon death
-    // for death, use coroutine to make enemy smaller until death
-    // for death, add rigidbody.
     // for death, if enemy, give XP back to the player.
 
     void Update() {
@@ -60,31 +58,45 @@ public class Health : MonoBehaviour
 
     void Death() {
         isDying = true;
-        if(hType == healthType.Object) {
-            Destroy(this.GetComponent<Collider>());     // keep it from colliding with it's parts.
-            Destroy(this.GetComponent<Renderer>());          // make it disappear
-            for(int i = 0; i < 4; i++) {
-                // randomize color of each part
-                // have each part inherit bullet velocity
-                // change the number of parts based on the size of the object.
-                // have each part be randomly placed inside of the object, instead of centered.
-                GameObject part = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                part.transform.localScale = Vector3.one * Random.Range(0.3f, 0.6f);
-                part.transform.position = this.transform.position;
-                part.transform.Translate(Random.Range(-.5f, .5f), Random.Range(-.5f, .5f), Random.Range(-.5f, .5f));
-                part.AddComponent<Rigidbody>();     // make it fall down.
-            }
-            Destroy(this.gameObject, 1);
-            aud.PlayOneShot(death);
 
-        } else if(hType == healthType.Enemy) {
-            this.gameObject.AddComponent<Rigidbody>();  // make enemy fall to death
-            // Destroy(this.gameObject, 5);                // destroy after 5 seconds, replaced by coroutine
-            StartCoroutine(GetSmallAndDie());
-        } else if(hType == healthType.Player) {
-            Application.LoadLevel(0);       // restart the level.
+        switch(hType) {
+            case healthType.Object: ObjectDeath();
+                break;
+            case healthType.Enemy: EnemyDeath();
+                break;
+            case healthType.Player: PlayerDeath();
+                break;
+            default: Debug.Log("How did you get here?");
+                break;
         }
-        
+    }
+
+    void ObjectDeath() {
+        Destroy(this.GetComponent<Collider>());     // keep it from colliding with it's parts.
+        Destroy(this.GetComponent<Renderer>());          // make it disappear
+        for(int i = 0; i < 4; i++) {
+            // randomize color of each part
+            // have each part inherit bullet velocity
+            // change the number of parts based on the size of the object.
+            // have each part be randomly placed inside of the object, instead of centered.
+            GameObject part = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            part.transform.localScale = Vector3.one * Random.Range(0.3f, 0.6f);
+            part.transform.position = this.transform.position;
+            part.transform.Translate(Random.Range(-.5f, .5f), Random.Range(-.5f, .5f), Random.Range(-.5f, .5f));
+            part.AddComponent<Rigidbody>();     // make it fall down.
+        }
+        Destroy(this.gameObject, 1);
+        aud.PlayOneShot(death);
+    }
+
+    void EnemyDeath() {
+        this.gameObject.AddComponent<Rigidbody>();
+        UIManager.KilledEnemy();
+        StartCoroutine(GetSmallAndDie());
+    }
+
+    void PlayerDeath() {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
     IEnumerator GetSmallAndDie() {

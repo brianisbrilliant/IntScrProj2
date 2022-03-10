@@ -41,7 +41,7 @@ public class InputManager : MonoBehaviour
         }
         // restart game
         if(keyboard.digit7Key.wasPressedThisFrame) {
-            Application.LoadLevel(0);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
         // pause game
         if(keyboard.digit8Key.wasPressedThisFrame) {

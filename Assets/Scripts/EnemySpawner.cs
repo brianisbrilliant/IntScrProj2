@@ -9,7 +9,7 @@ public class EnemySpawner : MonoBehaviour
     public int totalDesiredEnemies = 10;
     public float spawnInterval = 3;
 
-    private int enemiesCreated = 0;
+    int enemiesCreated = 0;
 
     void Start() {
         StartCoroutine(SpawnEnemies());
@@ -26,7 +26,7 @@ public class EnemySpawner : MonoBehaviour
         Enemy enemy = Instantiate(enemyPrefab, this.transform.position, this.transform.rotation);
         enemy.transform.Translate(0, 1, 0);
         enemy.player = player;
-        enemy.playerHealth = player.GetComponent<Health>();
+        enemiesCreated += 1;
     }
     
 }
